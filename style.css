@@ -6,9 +6,9 @@
     3. Header / Cabecera
     4. Bloqueo de scroll y estados
     5. Hero
-    6. Ojo (sigue el cursor y parpadea)
+    6. Ojo
     7. Secciones claras y decoración HUD
-    8. Marcos (formas de las imágenes)
+    8. Marcos
     9. Artículos y tarjetas
     10. Carrusel de lujos
     11. Footer
@@ -22,6 +22,7 @@
     19. Estados del carrusel
     20. Parallax
     21. Final
+    22. Mejoras con JavaScript
 
 */
 
@@ -412,31 +413,28 @@ body:has(#chip-ok:checked) .chip-sincronizado { display: inline; }
 .hero-contenido .boton { pointer-events: auto; }
 
 
-/* Cada columna fija --mx y cada fila fija --my (de -1 a 1) */
-.hero:has(.zc0:hover) { --mx: -0.90; }
-.hero:has(.zc1:hover) { --mx: -0.70; }
-.hero:has(.zc2:hover) { --mx: -0.50; }
-.hero:has(.zc3:hover) { --mx: -0.30; }
-.hero:has(.zc4:hover) { --mx: -0.10; }
-.hero:has(.zc5:hover) { --mx: 0.10; }
-.hero:has(.zc6:hover) { --mx: 0.30; }
-.hero:has(.zc7:hover) { --mx: 0.50; }
-.hero:has(.zc8:hover) { --mx: 0.70; }
-.hero:has(.zc9:hover) { --mx: 0.90; }
-.hero:has(.zf0:hover) { --my: -0.32; }
-.hero:has(.zf1:hover) { --my: -0.11; }
-.hero:has(.zf2:hover) { --my: 0.11; }
-.hero:has(.zf3:hover) { --my: 0.32; }
-.hero:has(.zf4:hover) { --my: 0.54; }
-.hero:has(.zf5:hover) { --my: 0.75; }
-.hero:has(.zf6:hover) { --my: 0.96; }
-.hero:has(.zf7:hover) { --my: 1.00; }
-.hero:has(.zf8:hover) { --my: 1.00; }
-.hero:has(.zf9:hover) { --my: 1.00; }
-.hero:has(.zf10:hover) { --my: 1.00; }
-.hero:has(.zf11:hover) { --my: 1.00; }
+/* Cada columna fija --mx y cada fila fija --my (de -1 a 1).
+   Las 120 zonas no llevan clases: van en orden, 10 por fila, y se ubican con :nth-child */
+.hero:has(.hero-zonas span:nth-child(10n+1):hover) { --mx: -0.90; }
+.hero:has(.hero-zonas span:nth-child(10n+2):hover) { --mx: -0.70; }
+.hero:has(.hero-zonas span:nth-child(10n+3):hover) { --mx: -0.50; }
+.hero:has(.hero-zonas span:nth-child(10n+4):hover) { --mx: -0.30; }
+.hero:has(.hero-zonas span:nth-child(10n+5):hover) { --mx: -0.10; }
+.hero:has(.hero-zonas span:nth-child(10n+6):hover) { --mx: 0.10; }
+.hero:has(.hero-zonas span:nth-child(10n+7):hover) { --mx: 0.30; }
+.hero:has(.hero-zonas span:nth-child(10n+8):hover) { --mx: 0.50; }
+.hero:has(.hero-zonas span:nth-child(10n+9):hover) { --mx: 0.70; }
+.hero:has(.hero-zonas span:nth-child(10n):hover)   { --mx: 0.90; }
+.hero:has(.hero-zonas span:nth-child(-n+10):hover)                 { --my: -0.32; }
+.hero:has(.hero-zonas span:nth-child(n+11):nth-child(-n+20):hover) { --my: -0.11; }
+.hero:has(.hero-zonas span:nth-child(n+21):nth-child(-n+30):hover) { --my: 0.11; }
+.hero:has(.hero-zonas span:nth-child(n+31):nth-child(-n+40):hover) { --my: 0.32; }
+.hero:has(.hero-zonas span:nth-child(n+41):nth-child(-n+50):hover) { --my: 0.54; }
+.hero:has(.hero-zonas span:nth-child(n+51):nth-child(-n+60):hover) { --my: 0.75; }
+.hero:has(.hero-zonas span:nth-child(n+61):nth-child(-n+70):hover) { --my: 0.96; }
+.hero:has(.hero-zonas span:nth-child(n+71):hover)                  { --my: 1.00; }
 
-/* El iris y las ondas leen la misma posición del mouse */
+/* El iris sigue al mouse */
 .ojo-hero .iris { transform: translate(calc(var(--mx) * 30px), clamp(-14px, calc(var(--my) * 20px), 14px)); transition: none; }
 
 /* Sobre el botón: te mira fijo */
@@ -740,11 +738,12 @@ body:has(#chip-ok:checked) .chip-sincronizado { display: inline; }
     gap: 48px;
 }
 
-.footer-columnas nav {
+.footer-columnas > * {
     display: flex;
     flex-direction: column;
     gap: 10px;
     font-family: "Roboto", sans-serif;
+    font-style: normal; /* <address> viene en cursiva por defecto */
     color: var(--b-400);
 }
 
@@ -1104,6 +1103,29 @@ body:has(#chip-ok:checked) .chip-sincronizado { display: inline; }
     animation: sacudida 1.3s infinite;
 }
 
+/* Color de cada tipo de anuncio (antes iba en un style="" por cara) */
+.acento-rojo  { --color-acento: var(--br-500); }
+.acento-cyan  { --color-acento: var(--dc-500); }
+.acento-azul  { --color-acento: var(--db-300); }
+.acento-arena,
+.pop-premio   { --color-acento: var(--s-700); }
+.pop-confirmar { --color-acento: var(--b-300); }
+
+/* Línea "Proyectando…" con su barra al pie de cada cara (antes era un div repetido 28 veces) */
+.pop-cara::after {
+    content: "Proyectando en tu corteza visual…";
+    display: block;
+    padding: 0 var(--gap-20) 25px;
+    font-family: "Iosevka Charon Mono", "IBM Plex Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.04em;
+    color: var(--b-500);
+    background:
+        linear-gradient(var(--color-acento, var(--dc-500)) 0 0) var(--gap-20) calc(100% - 16px) / calc((100% - 40px) * 0.2) 3px no-repeat,
+        linear-gradient(rgba(102, 102, 102, 0.6) 0 0) var(--gap-20) calc(100% - 16px) / calc(100% - 40px) 3px no-repeat;
+    animation: proyectando 3s ease-in-out infinite;
+}
+
 .pop-confirmar,
 .pop-premio,
 .popup-extra { display: none; }
@@ -1133,8 +1155,11 @@ body:has(#chip-ok:checked) .chip-sincronizado { display: inline; }
 
 .popup-encabezado .smalltext { flex: 1; color: var(--color-acento, var(--dc-500)); }
 
-.senal-punto {
-    width: 8px;
+/* Punto de señal: ahora es un ::before del encabezado (antes era un <span> vacío) */
+.popup-encabezado::before,
+.escaner-encabezado::before {
+    content: "";
+    flex: 0 0 8px;
     height: 8px;
     border-radius: 50%;
     background: var(--color-acento, var(--br-400));
@@ -1166,26 +1191,6 @@ body:has(#chip-ok:checked) .chip-sincronizado { display: inline; }
 .popup-cuerpo .titulo,
 .popup-cuerpo .super-titulo { color: var(--b-200); }
 .popup-cuerpo img { width: 100%; height: 200px; object-fit: cover; border-radius: var(--radio-16); }
-
-.popup-transmision {
-    padding: 0 var(--gap-20) var(--gap-16);
-    color: var(--b-500);
-}
-
-.popup-pista {
-    height: 3px;
-    margin-top: 6px;
-    border-radius: 2px;
-    background: rgba(102, 102, 102, 0.6);
-}
-
-.popup-pista span {
-    display: block;
-    height: 100%;
-    border-radius: 2px;
-    background: var(--color-acento, var(--dc-500));
-    animation: proyectando 3s ease-in-out infinite;
-}
 
 .popup-acciones { display: flex; gap: var(--gap-12); flex-wrap: wrap; }
 
@@ -1595,7 +1600,10 @@ body:has(#apagado:checked) .pantalla-final {
 @keyframes banda-glitch { 50% { transform: translateX(-60px); } }
 @keyframes pulso { to { stroke-dashoffset: -1200; } }
 @keyframes parpadeo-senal { 50% { opacity: 0.3; } }
-@keyframes proyectando { 0% { width: 20%; } 100% { width: 90%; } }
+@keyframes proyectando {
+    from { background-size: calc((100% - 40px) * 0.2) 3px, calc(100% - 40px) 3px; }
+    to   { background-size: calc((100% - 40px) * 0.9) 3px, calc(100% - 40px) 3px; }
+}
 @keyframes aparecer { from { opacity: 0; } to { opacity: 1; } }
 
 /* Escáner */
@@ -1844,4 +1852,48 @@ body:has(#reiniciar:checked) {
     overflow: hidden;
     overscroll-behavior: none;
     touch-action: none;
+}
+
+
+
+/* 22. Mejoras con JavaScript (solo actúan si <html> tiene la clase .js) */
+
+/* Ojo (sección 6): el cursor lo mueve script.js, así que las 120 zonas ya no hacen falta */
+.js .hero-zonas { display: none; }
+.hero.mirando .ojo-hero .iris { animation: none !important; }
+
+/* Header (sección 3): fijo, se esconde al bajar y vuelve al subir */
+.js #cabecera-principal {
+    position: fixed;
+    transition: transform 0.35s ease;
+}
+.js #cabecera-principal.oculta { transform: translateY(-100%); }
+.nav-principal a[aria-current="true"] { color: var(--dc-500); }
+
+/* Pop-ups (sección 14): aparecen al llegar a ellos */
+.js .popup {
+    transition: opacity 0.35s ease, scale 0.35s ease;
+}
+.js .popup:not(.visible) {
+    opacity: 0;
+    scale: 0.92;
+    pointer-events: none;
+}
+
+/* Zona de errores (sección 13): cada capa aparece cuando se llega a ella */
+.js .caos-capas > :not(.en-vista) { visibility: hidden; }
+
+.carrusel-pila { touch-action: pan-y; }
+.carrusel-pila.arrastrando { cursor: grabbing; }
+
+.fuera-de-vista,
+.fuera-de-vista *,
+.fuera-de-vista *::before,
+.fuera-de-vista *::after { animation-play-state: paused !important; }
+
+label[role="button"]:focus-visible,
+.carrusel-pila:focus-visible,
+.pantalla-final:focus-visible {
+    outline: 2px solid var(--dc-500);
+    outline-offset: 3px;
 }

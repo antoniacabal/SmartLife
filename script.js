@@ -3,8 +3,8 @@
     0. Utilidades y ajustes
     3. Header / Cabecera (menú móvil, enlace activo, ocultar al bajar)
     4. Bloqueo de scroll y estados (reinicio de checkboxes, inert, foco)
-    5. Hero (puntos de la ola y aviso de chip sin revisar)
-    6. Ojo (sigue el cursor)
+    5. Hero (puntos de la ola, aviso de chip sin revisar y color de la barra de scroll)
+    6. Ojo (sigue el cursor y a veces se descontrola)
     8. Idioma (selector del header)
    10. Carrusel de lujos (flechas, deslizar, autoplay, se cierra al salir)
    13. Monitoreo / zona de errores (aparece de a poco)
@@ -223,8 +223,25 @@
 
         // Clics en cualquier parte que no sea el botón del chip (los enlaces están bloqueados)
         document.addEventListener('click', e => {
-            if (!e.target.closest('.hero-contenido .boton, .overlay, .selector-idioma')) avisar();
+            if (!e.target.closest('.hero-contenido .boton, .overlay, .selector-idioma, .ojo-hero')) avisar();
         });
+    }
+
+    // La barra de scroll se pone clara cuando más de la mitad de la pantalla es una sección clara
+    function s5_scroll() {
+        const claras = $$('.seccion-clara');
+        if (!claras.length) return;
+        const actualizar = porFrame(() => {
+            const alto = innerHeight;
+            const cubierto = claras.reduce((suma, s) => {
+                const r = s.getBoundingClientRect();
+                return suma + Math.max(0, Math.min(r.bottom, alto) - Math.max(r.top, 0));
+            }, 0);
+            document.documentElement.classList.toggle('scroll-claro', cubierto > alto / 2);
+        });
+        addEventListener('scroll', actualizar, { passive: true });
+        addEventListener('resize', actualizar);
+        actualizar();
     }
 
 
@@ -263,6 +280,46 @@
         });
 
         addEventListener('pointermove', e => { if (e.pointerType !== 'touch') alMover(e); }, { passive: true });
+    }
+
+
+    /* Reacciones del ojo: 4 clics, mucho rato con el mouse encima o mucho rato
+       sin tocar la página → ojo loco durante un segundo */
+    function s6_reacciones() {
+        const hero = $('.hero');
+        const ojo = $('.ojo-hero');
+        if (!hero || !ojo) return;
+
+        const T = { LOCO: 1000, ENCIMA: 4000, QUIETO: 15000, OLVIDAR_CLICS: 4000 };
+        let clics = 0, olvidar, loco, encima, quieto;
+
+        const enloquecer = () => {
+            hero.classList.add('ojo-enloquecido');
+            clearTimeout(loco);
+            loco = setTimeout(() => hero.classList.remove('ojo-enloquecido'), T.LOCO);
+        };
+
+        ojo.addEventListener('click', () => {
+            clics++;
+            clearTimeout(olvidar);
+            olvidar = setTimeout(() => { clics = 0; }, T.OLVIDAR_CLICS);
+            if (clics >= 4) { clics = 0; enloquecer(); }
+        });
+
+        ojo.addEventListener('pointerenter', () => { clearTimeout(encima); encima = setTimeout(enloquecer, T.ENCIMA); });
+        ojo.addEventListener('pointerleave', () => clearTimeout(encima));
+
+        // Sin interactuar: cada 15 s de quietud, el ojo se descontrola (solo si se ve y no hay diálogos)
+        const vigilarQuietud = () => {
+            clearTimeout(quieto);
+            quieto = setTimeout(function revisar() {
+                if (!hero.classList.contains('fuera-de-vista') && !activo('escaner-abierto') && !document.hidden) enloquecer();
+                quieto = setTimeout(revisar, T.QUIETO);
+            }, T.QUIETO);
+        };
+        const alInteractuar = porFrame(vigilarQuietud);
+        ['pointermove', 'pointerdown', 'keydown', 'scroll', 'wheel', 'touchstart'].forEach(ev => addEventListener(ev, alInteractuar, { passive: true }));
+        vigilarQuietud();
     }
 
 
@@ -750,7 +807,7 @@
 
     /* 23. Arranque */
     const modulos = [
-        s4_estados, s8_idioma, s22_extras, s3_cabecera, s16_overlays, s5_ola, s5_bloqueo, s6_ojo,
+        s4_estados, s8_idioma, s22_extras, s3_cabecera, s16_overlays, s5_ola, s5_bloqueo, s5_scroll, s6_ojo, s6_reacciones,
         s10_carrusel, s13_caos, s14_popups, s15_blackout, s20_parallax, s21_final
     ];
 

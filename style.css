@@ -267,6 +267,26 @@ label {
     background: var(--b-200);
 }
 
+/* Barra de scroll que acompaña al fondo (script.js pone .scroll-claro en <html>) */
+@property --scroll-pista { syntax: "<color>"; inherits: true; initial-value: #000000; }
+@property --scroll-pulgar { syntax: "<color>"; inherits: true; initial-value: #4c4c4c; }
+
+html {
+    --scroll-pista: #000000;
+    --scroll-pulgar: var(--b-800);
+    scrollbar-color: var(--scroll-pulgar) var(--scroll-pista);
+    transition: --scroll-pista 0.4s ease, --scroll-pulgar 0.4s ease;
+}
+
+html.scroll-claro {
+    --scroll-pista: var(--dc-200);
+    --scroll-pulgar: var(--dc-400);
+}
+
+html::-webkit-scrollbar { width: 12px; }
+html::-webkit-scrollbar-track { background: var(--scroll-pista); }
+html::-webkit-scrollbar-thumb { background: var(--scroll-pulgar); border-radius: 6px; border: 2px solid var(--scroll-pista); }
+
 /* 4. Bloqueo de scroll y estados */
 
 html:has(#chip-ok:not(:checked)),
@@ -519,6 +539,31 @@ body:has(#chip-ok:checked) .aviso-chip { display: none; }
 .ojo-loco .f2 { animation-name: l-bajando; }
 .ojo-loco .f3 { animation-name: l-cerrado; }
 .ojo-loco .f4 { animation-name: l-subiendo; }
+
+/* Durante los cuadros del parpadeo el iris se oculta: así nunca se asoma fuera del párpado
+   aunque esté mirando hacia un borde (los cuadros ya dibujan el ojo entrecerrado) */
+.parpado-iris { animation: step-end infinite; }
+.ojo-normal .parpado-iris { animation-name: n-parpado; animation-duration: 3.2s; }
+.ojo-loco .parpado-iris { animation-name: l-parpado; animation-duration: 1.4s; }
+
+@keyframes n-parpado { 0% { opacity: 1; } 93.5% { opacity: 0; } 97.5% { opacity: 1; } }
+@keyframes l-parpado { 0% { opacity: 1; } 84% { opacity: 0; } 94% { opacity: 1; } }
+
+/* Reacciones del ojo del hero (las activa script.js): 4 clics, mucho rato encima
+   o sin interactuar = ojo loco por un segundo */
+.ojo-hero { pointer-events: auto; cursor: pointer; -webkit-tap-highlight-color: transparent; }
+
+.ojo-hero-loco {
+    position: absolute;
+    top: calc(min(240px, 60vw) * -0.091);   /* centrado sobre el ojo normal (es más alto) */
+    left: 50%;
+    translate: -50% 0;
+    visibility: hidden;
+    pointer-events: none;
+}
+.hero.ojo-enloquecido .ojo-hero { visibility: hidden; }
+.hero.ojo-enloquecido .ojo-hero-loco { visibility: visible; }
+
 
 .ojo-loco .ojo-svg { animation: temblor 0.14s steps(2) infinite; }
 

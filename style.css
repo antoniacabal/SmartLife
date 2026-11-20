@@ -229,6 +229,32 @@ label {
 
 .nav-principal a:hover { color: var(--dc-500); }
 
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+}
+
+.selector-idioma select {
+    appearance: none;
+    padding: var(--gap-8) 30px var(--gap-8) var(--gap-12);
+    border: 1px solid rgba(106, 198, 225, 0.6);
+    border-radius: var(--radio-12);
+    background: transparent url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M1 1l4 4 4-4' fill='none' stroke='%236ac6e1' stroke-width='1.5'/%3E%3C/svg%3E") right 12px center no-repeat;
+    color: var(--b-200);
+    font-family: "Iosevka Charon", "IBM Plex Mono", monospace;
+    font-weight: 700;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.selector-idioma select:hover,
+.selector-idioma select:focus-visible { border-color: var(--dc-500); outline: none; }
+.selector-idioma option { background: var(--b-900); color: var(--b-200); }
+
 .menu-hamburguesa {
     display: none;
     flex-direction: column;
@@ -377,6 +403,27 @@ body:has(#chip-ok:checked) .chip-sincronizado { display: inline; }
     letter-spacing: 0.04em;
 }
 
+.aviso-chip {
+    font-family: "Iosevka Charon Mono", "IBM Plex Mono", monospace;
+    font-size: 13px;
+    letter-spacing: 0.04em;
+    color: var(--br-400);
+    opacity: 0;
+    translate: 0 -6px;
+    transition: opacity 0.3s, translate 0.3s;
+}
+
+.hero.bloqueado .aviso-chip { opacity: 1; translate: 0 0; }
+.hero.bloqueado .hero-contenido .boton { animation: sacudir-chip 0.55s cubic-bezier(0.36, 0.07, 0.19, 0.97); }
+body:has(#chip-ok:checked) .aviso-chip { display: none; }
+
+@keyframes sacudir-chip {
+    10%, 90% { translate: -2px 0; }
+    20%, 80% { translate: 4px 0; }
+    30%, 50%, 70% { translate: -8px 0; }
+    40%, 60% { translate: 8px 0; }
+}
+
 /* 6. Ojo animado */
 .ojo-area {
     position: relative;
@@ -435,7 +482,7 @@ body:has(#chip-ok:checked) .chip-sincronizado { display: inline; }
 .hero:has(.hero-zonas span:nth-child(n+71):hover)                  { --my: 1.00; }
 
 /* El iris sigue al mouse */
-.ojo-hero .iris { transform: translate(calc(var(--mx) * 30px), clamp(-14px, calc(var(--my) * 20px), 14px)); transition: none; }
+.ojo-hero .iris { transform: translate(calc(var(--mx) * 44px), clamp(-12px, calc(var(--my) * 26px), 24px)); transition: none; }
 
 /* Sobre el botón: te mira fijo */
 .hero:has(.hero-contenido .boton:hover) { --mx: 0; --my: 0.45; }
@@ -444,9 +491,9 @@ body:has(#chip-ok:checked) .chip-sincronizado { display: inline; }
 
 @keyframes vigilar {
     0%, 12%   { transform: translate(0, 0); }
-    20%, 38%  { transform: translate(-18px, 2px); }
+    20%, 38%  { transform: translate(-32px, 2px); }
     46%, 52%  { transform: translate(0, 6px); }
-    60%, 80%  { transform: translate(18px, 2px); }
+    60%, 80%  { transform: translate(32px, 2px); }
     90%, 100% { transform: translate(0, 0); }
 }
 
@@ -516,6 +563,9 @@ body:has(#chip-ok:checked) .chip-sincronizado { display: inline; }
 .deco-izquierda { left: -410px; }
 .deco-derecha { right: -410px; }
 
+#lujos { padding-bottom: calc(var(--espacio-seccion) / 4); }
+#noticias { padding-top: calc(var(--espacio-seccion) / 4); }
+
 .encabezado-seccion {
     display: flex;
     flex-direction: column;
@@ -531,6 +581,8 @@ body:has(#chip-ok:checked) .chip-sincronizado { display: inline; }
 .marco {
     position: relative;
     overflow: hidden;
+    -webkit-mask: var(--forma) center / 100% 100% no-repeat;
+            mask: var(--forma) center / 100% 100% no-repeat;
     filter: drop-shadow(0 0 12px rgba(64, 182, 217, 0.3));
 }
 
@@ -540,11 +592,11 @@ body:has(#chip-ok:checked) .chip-sincronizado { display: inline; }
     object-fit: cover;
 }
 
-.marco-a { clip-path: polygon(19.32% 4.47%, 20.54% 3.10%, 21.82% 1.99%, 23.14% 1.12%, 24.51% 0.50%, 25.93% 0.12%, 27.40% 0.00%, 95.52% 0.00%, 96.89% 0.21%, 98.01% 0.83%, 98.88% 1.88%, 99.49% 3.33%, 99.86% 5.21%, 99.98% 7.50%, 99.80% 72.01%, 99.67% 74.30%, 99.29% 76.18%, 98.66% 77.64%, 97.79% 78.68%, 96.67% 79.30%, 95.30% 79.51%, 74.69% 79.51%, 73.24% 79.67%, 71.89% 80.16%, 70.63% 80.97%, 69.46% 82.11%, 68.39% 83.58%, 67.41% 85.37%, 63.22% 94.14%, 62.24% 95.93%, 61.17% 97.40%, 60.00% 98.53%, 58.74% 99.35%, 57.39% 99.84%, 55.94% 100.00%, 4.48% 100.00%, 3.11% 99.79%, 1.99% 99.17%, 1.12% 98.13%, 0.50% 96.67%, 0.12% 94.79%, 0.00% 92.50%, 0.00% 35.97%, 0.10% 33.55%, 0.40% 31.31%, 0.90% 29.23%, 1.60% 27.32%, 2.50% 25.57%, 3.60% 24.00%); aspect-ratio: 261 / 156; }
-.marco-b { clip-path: polygon(0.00% 7.50%, 0.10% 5.21%, 0.38% 3.33%, 0.86% 1.88%, 1.53% 0.83%, 2.40% 0.21%, 3.45% 0.00%, 96.55% 0.00%, 97.60% 0.21%, 98.47% 0.83%, 99.14% 1.88%, 99.62% 3.33%, 99.90% 5.21%, 100.00% 7.50%, 100.00% 59.17%, 99.93% 61.60%, 99.71% 63.89%, 99.35% 66.04%, 98.85% 68.05%, 98.21% 69.92%, 97.42% 71.65%, 85.70% 94.28%, 84.82% 95.80%, 83.88% 97.05%, 82.90% 98.03%, 81.87% 98.73%, 80.80% 99.16%, 79.67% 99.32%, 42.41% 99.94%, 41.36% 99.75%, 40.49% 99.14%, 39.82% 98.11%, 39.34% 96.66%, 39.06% 94.79%, 38.96% 92.50%, 38.96% 79.72%, 38.86% 77.43%, 38.58% 75.55%, 38.10% 74.09%, 37.43% 73.05%, 36.56% 72.43%, 35.51% 72.22%, 3.45% 72.22%, 2.40% 72.01%, 1.53% 71.39%, 0.86% 70.34%, 0.38% 68.89%, 0.10% 67.01%, 0.00% 64.72%); aspect-ratio: 265 / 122; }
-.marco-d { clip-path: polygon(0.00% 5.37%, 0.21% 3.73%, 0.83% 2.39%, 1.88% 1.34%, 3.33% 0.60%, 5.21% 0.15%, 7.50% 0.00%, 39.76% 0.00%, 42.20% 0.11%, 44.51% 0.43%, 46.69% 0.97%, 48.75% 1.72%, 50.68% 2.68%, 52.48% 3.86%, 94.78% 35.11%, 96.38% 36.44%, 97.68% 37.85%, 98.69% 39.35%, 99.42% 40.93%, 99.86% 42.59%, 100.00% 44.34%, 100.00% 94.63%, 99.79% 96.27%, 99.17% 97.61%, 98.13% 98.66%, 96.67% 99.40%, 94.79% 99.85%, 92.50% 100.00%, 32.39% 100.00%, 30.10% 99.85%, 28.22% 99.40%, 26.77% 98.66%, 25.72% 97.61%, 25.10% 96.27%, 24.89% 94.63%, 24.89% 77.27%, 24.68% 75.62%, 24.06% 74.26%, 23.02% 73.19%, 21.56% 72.39%, 19.69% 71.89%, 17.40% 71.67%, 7.49% 71.38%, 5.20% 71.16%, 3.33% 70.66%, 1.87% 69.86%, 0.83% 68.79%, 0.21% 67.43%, 0.00% 65.78%); aspect-ratio: 154 / 215; }
-.marco-e { clip-path: polygon(80.68% 4.47%, 79.46% 3.10%, 78.18% 1.99%, 76.86% 1.12%, 75.49% 0.50%, 74.07% 0.12%, 72.60% 0.00%, 4.48% 0.00%, 3.11% 0.21%, 1.99% 0.83%, 1.13% 1.88%, 0.51% 3.33%, 0.14% 5.21%, 0.02% 7.50%, 0.20% 72.01%, 0.33% 74.30%, 0.71% 76.18%, 1.33% 77.64%, 2.21% 78.68%, 3.33% 79.30%, 4.70% 79.51%, 25.31% 79.51%, 26.76% 79.67%, 28.11% 80.16%, 29.37% 80.97%, 30.54% 82.11%, 31.61% 83.58%, 32.59% 85.37%, 36.78% 94.14%, 37.76% 95.93%, 38.83% 97.40%, 40.00% 98.53%, 41.26% 99.35%, 42.61% 99.84%, 44.06% 100.00%, 95.52% 100.00%, 96.89% 99.79%, 98.01% 99.17%, 98.88% 98.13%, 99.50% 96.67%, 99.88% 94.79%, 100.00% 92.50%, 100.00% 35.97%, 99.90% 33.55%, 99.60% 31.31%, 99.10% 29.23%, 98.40% 27.32%, 97.50% 25.57%, 96.40% 24.00%); aspect-ratio: 261 / 156; }
-.marco-f { clip-path: polygon(100.00% 92.50%, 99.90% 94.79%, 99.62% 96.67%, 99.14% 98.13%, 98.47% 99.17%, 97.60% 99.79%, 96.55% 100.00%, 3.45% 100.00%, 2.40% 99.79%, 1.53% 99.17%, 0.86% 98.13%, 0.38% 96.67%, 0.10% 94.79%, 0.00% 92.50%, 0.00% 40.83%, 0.07% 38.40%, 0.29% 36.11%, 0.65% 33.96%, 1.15% 31.95%, 1.79% 30.08%, 2.58% 28.35%, 14.30% 5.72%, 15.18% 4.20%, 16.12% 2.95%, 17.10% 1.97%, 18.13% 1.27%, 19.20% 0.84%, 20.33% 0.68%, 57.59% 0.06%, 58.64% 0.25%, 59.51% 0.86%, 60.18% 1.89%, 60.66% 3.34%, 60.94% 5.21%, 61.04% 7.50%, 61.04% 20.28%, 61.14% 22.57%, 61.42% 24.45%, 61.90% 25.91%, 62.57% 26.95%, 63.44% 27.57%, 64.49% 27.78%, 96.55% 27.78%, 97.60% 27.99%, 98.47% 28.61%, 99.14% 29.65%, 99.62% 31.11%, 99.90% 32.99%, 100.00% 35.28%); aspect-ratio: 265 / 122; }
+.marco-a { --forma: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 261 156' preserveAspectRatio='none'%3E%3Cpath d='M50.43 6.97Q59.82 0.00 71.52 0.00L249.30 0.00Q261.00 0.00 260.95 11.70L260.48 112.34Q260.43 124.04 248.73 124.04L194.95 124.04Q183.25 124.04 175.94 133.17L165.00 146.86Q157.70 156.00 146.00 156.00L11.70 156.00Q0.00 156.00 0.00 144.30L0.00 56.11Q0.00 44.41 9.39 37.44Z'/%3E%3C/svg%3E"); aspect-ratio: 261 / 156; }
+.marco-b { --forma: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 265 122' preserveAspectRatio='none'%3E%3Cpath d='M0.00 9.15Q0.00 0.00 9.15 0.00L255.85 0.00Q265.00 0.00 265.00 9.15L265.00 72.19Q265.00 81.34 258.16 87.42L227.11 115.02Q220.27 121.10 211.12 121.17L112.39 121.93Q103.24 122.00 103.24 112.85L103.24 97.26Q103.24 88.11 94.09 88.11L9.15 88.11Q0.00 88.11 0.00 78.96Z'/%3E%3C/svg%3E"); aspect-ratio: 265 / 122; }
+.marco-d { --forma: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 154 215' preserveAspectRatio='none'%3E%3Cpath d='M0.00 11.55Q0.00 0.00 11.55 0.00L61.23 0.00Q72.78 0.00 80.82 8.29L145.96 75.49Q154.00 83.79 154.00 95.34L154.00 203.45Q154.00 215.00 142.45 215.00L49.88 215.00Q38.33 215.00 38.33 203.45L38.33 166.14Q38.33 154.59 26.79 154.10L11.54 153.46Q0.00 152.97 0.00 141.42Z'/%3E%3C/svg%3E"); aspect-ratio: 154 / 215; }
+.marco-e { --forma: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 261 156' preserveAspectRatio='none'%3E%3Cpath d='M210.57 6.97Q201.18 0.00 189.48 0.00L11.70 0.00Q0.00 0.00 0.05 11.70L0.52 112.34Q0.57 124.04 12.27 124.04L66.05 124.04Q77.75 124.04 85.06 133.17L96.00 146.86Q103.30 156.00 115.00 156.00L249.30 156.00Q261.00 156.00 261.00 144.30L261.00 56.11Q261.00 44.41 251.61 37.44Z'/%3E%3C/svg%3E"); aspect-ratio: 261 / 156; }
+.marco-f { --forma: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 265 122' preserveAspectRatio='none'%3E%3Cpath d='M265.00 112.85Q265.00 122.00 255.85 122.00L9.15 122.00Q0.00 122.00 0.00 112.85L0.00 49.81Q0.00 40.66 6.84 34.58L37.89 6.98Q44.73 0.90 53.88 0.83L152.61 0.07Q161.76 0.00 161.76 9.15L161.76 24.74Q161.76 33.89 170.91 33.89L255.85 33.89Q265.00 33.89 265.00 43.04Z'/%3E%3C/svg%3E"); aspect-ratio: 265 / 122; }
 
 /* 9. Artículos y tarjetas */
 .articulo-destacado {
@@ -675,20 +727,20 @@ body:has(#chip-ok:checked) .chip-sincronizado { display: inline; }
     position: absolute;
     left: 9%;
     right: 9%;
-    top: 35%;
-    bottom: 5%;
+    top: 34%;
+    bottom: 2.5%;
     overflow: hidden;
     font-family: "Roboto", sans-serif;
-    font-size: 3.9cqw;
+    font-size: 3.55cqw;
     line-height: 1.45;
     color: var(--dc-300);
 }
 
 .hueco-muesca {
     float: left;
-    width: 22%;
+    width: 30%;
     height: 100%;
-    shape-outside: polygon(0 0, 0 0, 0 62%, 100% 62%, 100% 100%, 0 100%);
+    shape-outside: polygon(0 0, 0 0, 0 51%, 100% 51%, 100% 100%, 0 100%);
 }
 
 .carrusel-leyenda {
@@ -1113,7 +1165,7 @@ body:has(#chip-ok:checked) .chip-sincronizado { display: inline; }
 
 /* Línea "Proyectando…" con su barra al pie de cada cara (antes era un div repetido 28 veces) */
 .pop-cara::after {
-    content: "Proyectando en tu corteza visual…";
+    content: var(--txt-proyectando, "Projecting onto your visual cortex…");
     display: block;
     padding: 0 var(--gap-20) 25px;
     font-family: "Iosevka Charon Mono", "IBM Plex Mono", monospace;
@@ -1136,6 +1188,8 @@ body:has(#chip-ok:checked) .chip-sincronizado { display: inline; }
 .popup:has(> .pok:checked) > .pop-confirmar { display: none; }
 .popup:has(> .pok:checked) > .pop-premio { display: block; }
 
+.popup-unico:has(> .pok:checked) { display: none; }
+
 .popup:has(> .pok:checked) > .popup-extra {
     display: block;
     position: absolute;
@@ -1144,6 +1198,13 @@ body:has(#chip-ok:checked) .chip-sincronizado { display: inline; }
     width: 100%;
     rotate: 3deg;
 }
+
+/* Con JavaScript: cada cara se cierra por su lado y el pop-up termina al cerrar las dos últimas */
+/* Los pop-ups generados muestran una sola cara, cualquiera sea su tipo */
+.popup-clon > .pop-cara { display: block; }
+
+.pop-cara.cerrada,
+.popup.terminado { display: none !important; }
 
 .popup-encabezado {
     display: flex;
@@ -1283,10 +1344,21 @@ body:has(#reiniciar:checked) .pantalla-reinicio *::after {
 }
 
 .linea {
+    box-sizing: content-box;
     width: 0;
     overflow: hidden;
     white-space: pre;
-    animation: escribir calc(var(--n) * 0.045s) steps(var(--n)) var(--d) forwards;
+    /* Cursor de consola: un bloque que va delante del texto mientras se escribe */
+    border-right: 0.6ch solid transparent;
+    animation:
+        escribir calc(var(--n) * 0.028s) steps(var(--n)) var(--d) forwards,
+        cursor-consola calc(var(--n) * 0.028s + 0.32s) steps(1) var(--d);
+}
+
+.linea:last-child { border-right: 0; }
+
+@keyframes cursor-consola {
+    0%, 100% { border-right-color: currentColor; }
 }
 
 .linea.primera { color: var(--s-500); }
@@ -1386,8 +1458,9 @@ body:has(#desconectado:checked):has(#apagado:not(:checked)) .overlay-aviso { dis
     position: relative;
     width: 560px;
     max-width: 100%;
-    max-height: calc(100vh - 40px);
-    overflow: hidden;
+    max-height: calc(100dvh - 40px);
+    overflow-x: hidden;
+    overflow-y: auto;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -1411,6 +1484,8 @@ body:has(#desconectado:checked):has(#apagado:not(:checked)) .overlay-aviso { dis
     opacity: 0.35;
     pointer-events: none;
 }
+
+.escaner > * { flex-shrink: 0; }   /* sin esto el lector se aplastaba en celular */
 
 .escaner-encabezado {
     display: flex;
@@ -1509,29 +1584,35 @@ body:has(#desconectado:checked):has(#apagado:not(:checked)) .overlay-aviso { dis
 .escaner-accion { min-height: 42px; display: grid; place-items: center; }
 .escaner-accion > * { grid-area: 1 / 1; }
 .escaner-espera,
-.boton-continuar { display: none; }
+.boton-continuar { visibility: hidden; }
 
-body:has(#analizar:checked) .boton-analizar { display: none; }
-body:has(#analizar:checked) .escaner-espera { display: block; color: var(--b-500); animation: ocultar 0.01s 2.6s forwards; }
-body:has(#analizar:checked) .boton-continuar { display: inline-flex; visibility: hidden; animation: mostrar 0.01s 2.6s forwards; }
-body:has(#analizar:checked) .escaner-progreso { animation: progreso-escaner 2.6s forwards; }
-body:has(#analizar:checked) .lector-anillo { animation: giro-escaner 2.6s ease-in-out forwards; }
-body:has(#analizar:checked) .escaner-estado .e0 { visibility: hidden; }
-body:has(#analizar:checked) .escaner-estado .e1 { animation: mostrar 0.01s 0s forwards, ocultar 0.01s 0.9s forwards; }
-body:has(#analizar:checked) .escaner-estado .e2 { animation: mostrar 0.01s 0.9s forwards, ocultar 0.01s 1.8s forwards; }
-body:has(#analizar:checked) .escaner-estado .e3 { animation: mostrar 0.01s 1.8s forwards, ocultar 0.01s 2.6s forwards; }
-body:has(#analizar:checked) .escaner-estado .e4 { animation: mostrar 0.01s 2.6s forwards; }
-body:has(#analizar:checked) .escaner-sincronizado { visibility: hidden; display: block; animation: mostrar 0.01s 2.6s forwards; }
-body:has(#analizar:checked) .l1 { animation: leer 0.4s 0.3s forwards; }
-body:has(#analizar:checked) .l2,
-body:has(#analizar:checked) .l3 { animation: leer 0.4s 1.2s forwards; }
-body:has(#analizar:checked) .l4 { animation: leer 0.4s 2s forwards; }
-body:has(#analizar:checked) .l1 .vacio { animation: ocultar 0.01s 0.3s forwards; }
-body:has(#analizar:checked) .l1 .valor { animation: mostrar 0.01s 0.3s forwards; }
-body:has(#analizar:checked) :is(.l2, .l3) .vacio { animation: ocultar 0.01s 1.2s forwards; }
-body:has(#analizar:checked) :is(.l2, .l3) .valor { animation: mostrar 0.01s 1.2s forwards; }
-body:has(#analizar:checked) .l4 .vacio { animation: ocultar 0.01s 2s forwards; }
-body:has(#analizar:checked) .l4 .valor { animation: mostrar 0.01s 2s forwards; }
+/* Al abrir: "Coloque su muñeca…" (1.2 s) → "Detectando chip…" (1.2 s) → análisis de 2.6 s */
+.escaner-estado .e0b { animation: none; }
+body:has(#escaner-abierto:checked) .lector-centro { animation: detectar-chip 0.8s ease-in-out 3; }
+body:has(#escaner-abierto:checked) .escaner-espera { color: var(--b-500); animation: mostrar 0.01s 2.4s forwards, ocultar 0.01s 5s forwards; }
+body:has(#escaner-abierto:checked) .boton-continuar { animation: mostrar 0.01s 5s forwards; }
+body:has(#escaner-abierto:checked) .escaner-progreso { animation: progreso-escaner 2.6s 2.4s forwards; }
+body:has(#escaner-abierto:checked) .lector-anillo { animation: giro-escaner 2.6s ease-in-out 2.4s forwards; }
+body:has(#escaner-abierto:checked) .escaner-estado .e0 { animation: ocultar 0.01s 1.2s forwards; }
+body:has(#escaner-abierto:checked) .escaner-estado .e0b { animation: mostrar 0.01s 1.2s forwards, ocultar 0.01s 2.4s forwards, parpadeo-senal 0.6s steps(1) 1.2s 2; }
+body:has(#escaner-abierto:checked) .escaner-estado .e1 { animation: mostrar 0.01s 2.4s forwards, ocultar 0.01s 3.3s forwards; }
+body:has(#escaner-abierto:checked) .escaner-estado .e2 { animation: mostrar 0.01s 3.3s forwards, ocultar 0.01s 4.2s forwards; }
+body:has(#escaner-abierto:checked) .escaner-estado .e3 { animation: mostrar 0.01s 4.2s forwards, ocultar 0.01s 5s forwards; }
+body:has(#escaner-abierto:checked) .escaner-estado .e4 { animation: mostrar 0.01s 5s forwards; }
+body:has(#escaner-abierto:checked) .escaner-sincronizado { visibility: hidden; display: block; animation: mostrar 0.01s 5s forwards; }
+body:has(#escaner-abierto:checked) .l1 { animation: leer 0.4s 2.7s forwards; }
+body:has(#escaner-abierto:checked) :is(.l2, .l3) { animation: leer 0.4s 3.6s forwards; }
+body:has(#escaner-abierto:checked) .l4 { animation: leer 0.4s 4.4s forwards; }
+body:has(#escaner-abierto:checked) .l1 .vacio { animation: ocultar 0.01s 2.7s forwards; }
+body:has(#escaner-abierto:checked) .l1 .valor { animation: mostrar 0.01s 2.7s forwards; }
+body:has(#escaner-abierto:checked) :is(.l2, .l3) .vacio { animation: ocultar 0.01s 3.6s forwards; }
+body:has(#escaner-abierto:checked) :is(.l2, .l3) .valor { animation: mostrar 0.01s 3.6s forwards; }
+body:has(#escaner-abierto:checked) .l4 .vacio { animation: ocultar 0.01s 4.4s forwards; }
+body:has(#escaner-abierto:checked) .l4 .valor { animation: mostrar 0.01s 4.4s forwards; }
+
+@keyframes detectar-chip {
+    50% { scale: 1.08; box-shadow: 0 0 28px var(--dc-500); }
+}
 
 .aviso-y2k { width: 640px; max-width: 100%; }
 .aviso-y2k .ventana-cuerpo { display: flex; flex-direction: column; gap: var(--gap-16); padding: 28px; }
@@ -1653,8 +1734,15 @@ body:has(#apagado:checked) .pantalla-final {
         --margen: 20px;
         --espacio-seccion: 96px;
     }
-    .texto-hero { font-size: 52px; }
-    .super-titulo { font-size: 28px; }
+    .texto-hero { font-size: clamp(36px, 13vw, 52px); }
+    .super-titulo { font-size: 24px; }
+    .titulo { font-size: 20px; }
+    .parrafo { font-size: 15px; }
+    .hero-contenido { padding: 0 var(--margen); }
+    .selector-idioma { margin-left: auto; }
+    .selector-idioma select { font-size: 12px; padding: 6px 26px 6px 10px; }
+    .tarjeta-dorso .subtitulo { font-size: 4.8cqw; }
+    .dorso-texto { font-size: 3.4cqw; }
     .hero { min-height: 170vh; }
     .barra-sitio { height: 64px; }
     #cabecera-principal { padding-top: env(safe-area-inset-top); height: auto; min-height: 64px; flex-wrap: wrap; }
@@ -1693,8 +1781,8 @@ body:has(#apagado:checked) .pantalla-final {
     .solo-grande { display: none; }
     .monitoreo { padding-bottom: 1700px; }
     .transicion-glitch { height: 620px; }
-    .reinicio-terminal { font-size: 15px; }
-    .popup { width: calc(100vw - 40px); }
+    .reinicio-terminal { font-size: min(15px, calc((100vw - 48px) / (var(--largo, 48) * 0.62))); }   /* la línea más larga siempre cabe */
+    .popup { width: calc(100vw - 2 * var(--margen)); }
     .popup.col-cen,
     .popup.col-izq,
     .popup.col-der { left: 20px; right: auto; translate: none; }
@@ -1826,6 +1914,14 @@ body:has(#apagado:checked) .pantalla-final {
     35%  { opacity: 1; }
     100% { transform: translateY(60vh); opacity: 0; }
 }
+@media (max-width: 1024px) {
+    .articulo-destacado { gap: var(--gap-16) !important; }
+    .articulo-destacado:has(.marco-e) { gap: 0 !important; }
+    .articulo-destacado:has(.marco-e) .articulo-texto { margin-top: -26px; }
+    .articulo-destacado .marco,
+    .articulo-destacado .articulo-texto { animation: none !important; transform: none !important; }
+}
+
 @keyframes p-marco  { from { transform: translateY(90px); } to { transform: translateY(-90px); } }
 @keyframes p-texto  { from { transform: translateY(-30px); } to { transform: translateY(30px); } }
 @keyframes p-anillo { from { transform: translateY(-50%) rotate(-40deg); } to { transform: translateY(-50%) rotate(40deg); } }
@@ -1874,6 +1970,7 @@ body:has(#reiniciar:checked) {
 .js .popup {
     transition: opacity 0.35s ease, scale 0.35s ease;
 }
+.js .popup.saltando { opacity: 0; scale: 0.92; transition: none; }
 .js .popup:not(.visible) {
     opacity: 0;
     scale: 0.92;

@@ -283,15 +283,15 @@
     }
 
 
-    /* Reacciones del ojo: 4 clics, mucho rato con el mouse encima o mucho rato
-       sin tocar la página → ojo loco durante un segundo */
+    /* Reacciones del ojo: cada clic lo hace pestañear; al 4.º clic, con mucho rato el mouse
+       encima o mucho rato sin tocar la página → ojo loco durante un segundo */
     function s6_reacciones() {
         const hero = $('.hero');
         const ojo = $('.ojo-hero');
         if (!hero || !ojo) return;
 
-        const T = { LOCO: 1000, ENCIMA: 4000, QUIETO: 15000, OLVIDAR_CLICS: 4000 };
-        let clics = 0, olvidar, loco, encima, quieto;
+        const T = { PESTANEO: 320, LOCO: 1000, ENCIMA: 4000, QUIETO: 15000, OLVIDAR_CLICS: 4000 };
+        let clics = 0, olvidar, pestaneo, loco, encima, quieto;
 
         const enloquecer = () => {
             hero.classList.add('ojo-enloquecido');
@@ -299,11 +299,21 @@
             loco = setTimeout(() => hero.classList.remove('ojo-enloquecido'), T.LOCO);
         };
 
+        // Cada clic lo hace pestañear; al cuarto se enoja y, después del pestañeo, se descontrola
+        const pestanear = () => {
+            hero.classList.remove('pestaneando');
+            void hero.offsetWidth; // reinicia el pestañeo aunque se haga clic muy seguido
+            hero.classList.add('pestaneando');
+            clearTimeout(pestaneo);
+            pestaneo = setTimeout(() => hero.classList.remove('pestaneando'), T.PESTANEO);
+        };
+
         ojo.addEventListener('click', () => {
             clics++;
             clearTimeout(olvidar);
             olvidar = setTimeout(() => { clics = 0; }, T.OLVIDAR_CLICS);
-            if (clics >= 4) { clics = 0; enloquecer(); }
+            pestanear();
+            if (clics >= 4) { clics = 0; setTimeout(enloquecer, T.PESTANEO); }
         });
 
         ojo.addEventListener('pointerenter', () => { clearTimeout(encima); encima = setTimeout(enloquecer, T.ENCIMA); });

@@ -103,6 +103,25 @@ label {
     height: 0;
 }
 
+/* Sin selección de texto en la portada, el header, el footer y los botones
+   (al hacer clic varias veces en el ojo ya no se pinta todo de gris) */
+.hero,
+#cabecera-principal,
+#contacto,
+.barra-sitio,
+.boton,
+label,
+.cerrar-circulo,
+.carrusel-puntos {
+    -webkit-user-select: none;
+    user-select: none;
+    -webkit-touch-callout: none;
+}
+
+.hero img,
+#cabecera-principal img,
+#contacto img { -webkit-user-drag: none; }
+
 /* 1. Tipografías */
 .texto-hero {
     font-family: "Intel One Mono", monospace;
@@ -552,6 +571,20 @@ body:has(#chip-ok:checked) .aviso-chip { display: none; }
 /* Reacciones del ojo del hero (las activa script.js): 4 clics, mucho rato encima
    o sin interactuar = ojo loco por un segundo */
 .ojo-hero { pointer-events: auto; cursor: pointer; -webkit-tap-highlight-color: transparent; }
+
+/* Cada clic hace pestañear al ojo (0.32 s): los mismos cuadros del parpadeo, pero una sola vez */
+.hero.pestaneando .ojo-hero :is(.cuadro, .parpado-iris) { animation-duration: 0.32s !important; animation-iteration-count: 1 !important; animation-timing-function: step-end !important; }
+.hero.pestaneando .ojo-hero :is(.f1, .parpado-iris) { animation-name: clic-abierto !important; }
+.hero.pestaneando .ojo-hero .f2 { animation-name: clic-bajando1 !important; }
+.hero.pestaneando .ojo-hero .f3 { animation-name: clic-bajando2 !important; }
+.hero.pestaneando .ojo-hero .f4 { animation-name: clic-cerrado !important; }
+.hero.pestaneando .ojo-hero .f5 { animation-name: clic-subiendo !important; }
+
+@keyframes clic-abierto  { 0% { opacity: 0; } 100% { opacity: 1; } }
+@keyframes clic-bajando1 { 0% { opacity: 1; } 25%, 100% { opacity: 0; } }
+@keyframes clic-bajando2 { 0% { opacity: 0; } 25% { opacity: 1; } 50%, 100% { opacity: 0; } }
+@keyframes clic-cerrado  { 0% { opacity: 0; } 50% { opacity: 1; } 75%, 100% { opacity: 0; } }
+@keyframes clic-subiendo { 0% { opacity: 0; } 75% { opacity: 1; } 100% { opacity: 0; } }
 
 .ojo-hero-loco {
     position: absolute;
